@@ -13,7 +13,7 @@ use codegen::{Block, Function, Scope};
 use ipfsapi::IpfsApi;
 use julia_cms::{
     compositions::{
-        banners::BannerType, carousels::CarouselType, texts::TextType, CompositionCategory,
+        banners::BannerType, texts::TextType, CompositionCategory,
     },
     gencode::impl_composition_type_manager,
 };

@@ -2,11 +2,17 @@ pub mod banners;
 pub mod carousels;
 pub mod texts;
 
+extern crate proc_macro;
+
+use proc_macro::TokenStream;
+use strum::IntoEnumIterator;
+
+use std::mem;
 use strum_macros::{EnumIter, EnumString};
 
 use self::{
     banners::{BannerManager, BannerType},
-    carousels::{CarouselManager, carousel_type::CarouselType},
+    carousels::{carousel_type::CarouselType, CarouselManager},
     texts::{text_basic::TextBasicCreateReq, CompositionTypeManager, TextManager, TextType},
 };
 
@@ -37,6 +43,24 @@ pub enum CompositionCategory {
     Banner(BannerType),
     Text(TextType),
 }
+
+enum OptionCompositionTypes {
+    Carousel(carousels::carousel_type::CarouselTypeIter),
+    Banner(banners::BannerTypeIter),
+    Text(texts::TextTypeIter),
+    None,
+}
+
+// impl CompositionCategory {
+//     pub fn iterator() -> Iter<'static, CompositionCategory> {
+//         static COMPOSITION_CATEGORY: [CompositionCategory; 3] = [
+//             CompositionCategory::Carousel(CarouselType::Basic),
+//             CompositionCategory::Banner(BannerType::Basic),
+//             CompositionCategory::Text(TextType::Basic),
+//         ];
+//         COMPOSITION_CATEGORY.iter()
+//     }
+// }
 
 impl CategoryManager {
     fn get_public(

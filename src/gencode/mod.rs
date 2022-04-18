@@ -13,8 +13,9 @@ use crate::{
         CompositionCategory,
     },
     gencode::get_comp_type_manager::{
-        setup::{get_mod, write_to_file, ArmsBlock, CrudOperation},
-        util::get_composition_name,
+        crud_operation::CrudOperation,
+        helpers::{get_mod, import_composition_models, get_composition_name},
+        arms_block::ArmsBlock, write_to_file,
     },
     get_composition_name,
 };
@@ -32,6 +33,7 @@ pub fn impl_composition_type_manager(
 
     scope.import("std::any", "Any");
     scope.import("crate::compositions::texts", "CompositionTypeManager");
+
     scope.import(create_request_path, create_request);
     scope.import("strum_macros", "EnumIter");
     scope.import("strum_macros", "EnumString");
@@ -42,7 +44,10 @@ pub fn impl_composition_type_manager(
     scope.import("super", "UpdateDataOfComposition");
     scope.import("super", "carousel_basic");
     scope.import("super", "carousel_blurred_overlay");
+
+    // get_composition_create_request
     scope.import("super", "carousel_images");
+    import_composition_models(&mut scope, &composition_category);
     scope.import(create_request_path, create_request);
     scope.import("super::carousel_type", composition_type.as_str());
 
