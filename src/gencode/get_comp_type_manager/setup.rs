@@ -1,10 +1,15 @@
+use std::{
+    fs::File,
+    io::{BufReader, Read, Write},
+};
+
 use codegen::{Block, Scope};
 use strum::IntoEnumIterator;
 use strum_macros::EnumIter;
 
 use crate::compositions::{
     banners::{banner_basic::BannerCreateReq, BannerType},
-    carousels::CarouselType,
+    carousels::carousel_type::CarouselType,
     texts::TextType,
     CompositionCategory,
 };
@@ -138,18 +143,16 @@ impl ArmsBlock for Block {
 pub fn get_mod(composition_category: &CompositionCategory) -> String {
     match composition_category {
         CompositionCategory::Carousel(comp_type) => match comp_type {
-            crate::compositions::carousels::CarouselType::Basic => "carousel_basic".to_string(),
-            crate::compositions::carousels::CarouselType::BlurredOverlay => {
-                "carousel_blurred_overlay".to_string()
-            }
-            crate::compositions::carousels::CarouselType::Images => "carousel_image".to_string(),
+            CarouselType::Basic => "carousel_basic".to_string(),
+            CarouselType::BlurredOverlay => "carousel_blurred_overlay".to_string(),
+            CarouselType::Images => "carousel_images".to_string(),
         },
         CompositionCategory::Banner(comp_type) => match comp_type {
             BannerType::Basic => "banner_basic".to_string(),
             BannerType::SomeOtherComp => "some_other_comp".to_string(),
         },
         CompositionCategory::Text(comp_type) => match comp_type {
-            crate::compositions::texts::TextType::TextBasic => "text_basic".to_string(),
+            crate::compositions::texts::TextType::Basic => "text_basic".to_string(),
         },
     }
 }
@@ -161,4 +164,11 @@ pub fn get_composition_type(composition_category: &CompositionCategory) -> Strin
         CompositionCategory::Text(_) => "Text",
     }
     .to_string()
+}
+
+pub fn write_to_file(file_name: &str, contents: &mut String) -> std::io::Result<()> {
+    let mut file = File::create(file_name)?;
+    file.write_all(contents.as_bytes())?;
+    // assert_eq!(contents, "Hello, world!");
+    Ok(())
 }
