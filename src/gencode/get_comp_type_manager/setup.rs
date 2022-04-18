@@ -1,18 +1,22 @@
 use std::{
     fs::File,
     io::{BufReader, Read, Write},
+    ops::DerefMut,
 };
 
-use codegen::{Block, Scope};
+use codegen::Block;
 use strum::IntoEnumIterator;
 use strum_macros::EnumIter;
 
-use crate::compositions::{
-    banners::{banner_basic::BannerCreateReq, BannerType},
-    carousels::carousel_type::CarouselType,
-    texts::TextType,
-    CompositionCategory,
+use crate::{
+    compositions::{
+        banners::BannerType, carousels::carousel_type::CarouselType, texts::TextType,
+        CompositionCategory,
+    },
+    get_composition_name,
 };
+
+use super::util::get_composition_name;
 
 #[derive(Debug, EnumIter)]
 pub enum CrudOperation {
@@ -62,6 +66,8 @@ impl CrudOperation {
 
         format!("{} {}", arm_left, arm_right)
     }
+
+    fn get_arm_for_create() {}
 }
 
 pub trait ArmsBlock {
@@ -77,6 +83,22 @@ pub trait ArmsBlock {
         enum_type_name: String,
         composition_category: CompositionCategory,
     ) -> &mut Self;
+
+    fn add_arm_for_create(
+        &mut self,
+        crud_operation: &CrudOperation,
+        enum_type_name: String,
+        composition_category: CompositionCategory,
+    ) -> &mut Self;
+
+    fn add_arms_for_create(
+        &mut self,
+        crud_operation: &CrudOperation,
+        enum_type_name: &String,
+        composition_category: &CompositionCategory,
+    ) -> &mut Self;
+
+    fn get_composition_create_request(composition_category: &CompositionCategory) -> String;
 }
 
 impl ArmsBlock for Block {
@@ -118,25 +140,94 @@ impl ArmsBlock for Block {
         self
     }
 
+    fn add_arms_for_create(
+        &mut self,
+        crud_operation: &CrudOperation,
+        enum_type_name: &String,
+        composition_category: &CompositionCategory,
+    ) -> &mut Self {
+        match composition_category {
+            CompositionCategory::Carousel(_) => {
+                for item in CarouselType::iter() {
+                    self.add_arm_for_create(
+                        &crud_operation,
+                        format!("{:?}", item),
+                        CompositionCategory::Carousel(item),
+                    );
+                }
+            }
+            CompositionCategory::Banner(_) => {
+                for item in BannerType::iter() {
+                    self.add_arm_for_create(
+                        &crud_operation,
+                        format!("{:?}", item),
+                        CompositionCategory::Banner(item),
+                    );
+                }
+            }
+            CompositionCategory::Text(_) => {
+                for item in TextType::iter() {
+                    self.add_arm_for_create(
+                        &crud_operation,
+                        format!("{:?}", item),
+                        CompositionCategory::Text(item),
+                    );
+                }
+            }
+        }
+
+        self
+    }
+
     fn add_arm(
         &mut self,
         crud_operation: &CrudOperation,
         enum_type_name: String,
         composition_category: CompositionCategory,
     ) -> &mut Self {
-        let comp_type_name = match composition_category {
-            CompositionCategory::Carousel(_) => "CarouselType",
-            CompositionCategory::Banner(_) => "BannerType",
-            CompositionCategory::Text(_) => "TextType",
-        };
-        // "CarouselType".to_string(),
+        let comp_type_name = get_composition_name!(&composition_category);
         self.line(crud_operation.get_arm(
-            comp_type_name.to_string(),
+            get_composition_name(&composition_category, true),
             enum_type_name,
             get_mod(&composition_category),
         ));
 
         self
+    }
+
+    fn add_arm_for_create(
+        &mut self,
+        crud_operation: &CrudOperation,
+        enum_type_name: String,
+        composition_category: CompositionCategory,
+    ) -> &mut Self {
+        let comp_type_name = get_composition_name(&composition_category, true);
+        let create_request = Self::get_composition_create_request(&composition_category);
+
+        let matcher = format!("{comp_type_name}::{enum_type_name} => match create_request.downcast_ref::<{create_request}>()");
+
+        self.push_block(
+            Block::new(matcher.as_str())
+                .line(format!(
+                    "Some(req) => {}::create(req, layout_id, author_id),",
+                    get_mod(&composition_category)
+                ))
+                .line("None => panic!(\"failed...\")")
+                .to_owned(),
+        )
+    }
+
+    fn get_composition_create_request(composition_category: &CompositionCategory) -> String {
+        match composition_category {
+            CompositionCategory::Carousel(comp_type) => match comp_type {
+                CarouselType::Basic => "CarouselBasicCreateReq",
+                CarouselType::BlurredOverlay => "CarouselBlurredOverlayCreateReq",
+                CarouselType::Images => "CarouselOfImagesCreateReq",
+            },
+            CompositionCategory::Banner(_) => todo!(),
+            CompositionCategory::Text(_) => todo!(),
+        }
+        .to_string()
     }
 }
 
@@ -157,14 +248,15 @@ pub fn get_mod(composition_category: &CompositionCategory) -> String {
     }
 }
 
-pub fn get_composition_type(composition_category: &CompositionCategory) -> String {
-    match composition_category {
-        CompositionCategory::Carousel(_) => "Carousel",
-        CompositionCategory::Banner(_) => "Banner",
-        CompositionCategory::Text(_) => "Text",
-    }
-    .to_string()
-}
+// // todo - same as above with "Type" added
+// fn get_composition_type(composition_category: &CompositionCategory) -> String {
+//     match composition_category {
+//         CompositionCategory::Carousel(_) => "CarouselType",
+//         CompositionCategory::Banner(_) => "BannerType",
+//         CompositionCategory::Text(_) => "TextType",
+//     }
+//     .to_string()
+// }
 
 pub fn write_to_file(file_name: &str, contents: &mut String) -> std::io::Result<()> {
     let mut file = File::create(file_name)?;

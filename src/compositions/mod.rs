@@ -6,7 +6,7 @@ use strum_macros::{EnumIter, EnumString};
 
 use self::{
     banners::{BannerManager, BannerType},
-    carousels::{CarouselManager, CarouselType},
+    carousels::{CarouselManager, carousel_type::CarouselType},
     texts::{text_basic::TextBasicCreateReq, CompositionTypeManager, TextManager, TextType},
 };
 
@@ -31,6 +31,7 @@ struct CategoryManager {
     banner_manager: BannerManager,
 }
 
+#[derive(Debug)]
 pub enum CompositionCategory {
     Carousel(CarouselType),
     Banner(BannerType),

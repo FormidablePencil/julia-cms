@@ -9,11 +9,14 @@ use codegen::{Block, Scope, Variant};
 use crate::{
     compositions::{
         banners::banner_basic::{self, BannerCreateReq},
+        carousels::carousel_basic::CarouselBasicCreateReq,
         CompositionCategory,
     },
-    gencode::get_comp_type_manager::setup::{
-        get_composition_type, get_mod, write_to_file, ArmsBlock, CrudOperation,
+    gencode::get_comp_type_manager::{
+        setup::{get_mod, write_to_file, ArmsBlock, CrudOperation},
+        util::get_composition_name,
     },
+    get_composition_name,
 };
 
 pub fn impl_composition_type_manager(
@@ -21,11 +24,13 @@ pub fn impl_composition_type_manager(
     create_request: &str,
     create_request_path: &str,
 ) {
-    let composition_type = get_composition_type(&composition_category);
+    let composition_type = get_composition_name(&composition_category, true);
 
-    let generics = format!("{composition_type}Type, {create_request}");
+    let generics = format!("{composition_type}, {create_request}");
 
     let mut scope = Scope::new();
+
+    scope.import("std::any", "Any");
     scope.import("crate::compositions::texts", "CompositionTypeManager");
     scope.import(create_request_path, create_request);
     scope.import("strum_macros", "EnumIter");
@@ -39,10 +44,7 @@ pub fn impl_composition_type_manager(
     scope.import("super", "carousel_blurred_overlay");
     scope.import("super", "carousel_images");
     scope.import(create_request_path, create_request);
-    scope.import(
-        "super::carousel_type",
-        format!("{composition_type}Type").as_str(),
-    );
+    scope.import("super::carousel_type", composition_type.as_str());
 
     // scope
     //     .new_enum(format!("{composition_type}Type").as_str())
@@ -63,7 +65,7 @@ pub fn impl_composition_type_manager(
             Scope::new()
                 .new_fn("get_public")
                 .arg_ref_self()
-                .arg("composition_type", format!("{composition_type}Type"))
+                .arg("composition_type", &composition_type)
                 .arg("composition_source_id", "u128")
                 .push_block(
                     Block::new("match composition_type")
@@ -76,7 +78,7 @@ pub fn impl_composition_type_manager(
             Scope::new()
                 .new_fn("get_private")
                 .arg_ref_self()
-                .arg("composition_type", format!("{composition_type}Type"))
+                .arg("composition_type", &composition_type)
                 .arg("composition_source_id", "u128")
                 .arg("author_id", "u128")
                 .push_block(
@@ -90,22 +92,31 @@ pub fn impl_composition_type_manager(
             Scope::new()
                 .new_fn("create")
                 .arg_ref_self()
-                .arg("composition_type", format!("{composition_type}Type"))
-                .arg("create_request", create_request)
+                .arg("composition_type", &composition_type)
+                .arg("create_request", "Box<dyn Any>")
                 .arg("layout_id", "u128")
                 .arg("author_id", "u128")
-                .push_block(
-                    Block::new("match composition_type")
-                        .add_arms(CrudOperation::Create, &composition_category)
-                        .to_owned(),
-                )
-                .to_owned(),
+                .push_block(Block::new("match composition_type")
+                    .add_arms_for_create(&CrudOperation::Update,&composition_type, &composition_category).to_owned()
+                ).to_owned()
+                    // .push_block(
+                    //     Block::new("CarouselType::Basic => match create_request.downcast_ref::<CarouselBasicCreateReq>()")
+                    //         .line("Some(req) => carousel_basic::create(req, layout_id, author_id),")
+                    //         .line("None => panic!()")
+                    //         .to_owned()
+                    //         // CarouselType::Basic => match create_request.downcast_ref::<CarouselBasicCreateReq>() {
+                    //         //     Some(req) => carousel_basic::create(req, layout_id, author_id),
+                    //         //     None => panic!("&a isn't a B!"),
+                    //         // },
+                    //         // .add_arms(CrudOperation::Create, &composition_category)
+                    // ).to_owned())
+                // .to_owned(),
         )
         .push_fn(
             Scope::new()
                 .new_fn("update")
                 .arg_ref_self()
-                .arg("composition_type", format!("{composition_type}Type"))
+                .arg("composition_type", &composition_type)
                 .arg("composition_update_que", "Vec<UpdateDataOfComposition>")
                 .arg("composition_source_id", "u128")
                 .arg("author_id", "u128")
@@ -120,7 +131,7 @@ pub fn impl_composition_type_manager(
             Scope::new()
                 .new_fn("delete")
                 .arg_ref_self()
-                .arg("composition_type", format!("{composition_type}Type"))
+                .arg("composition_type", &composition_type)
                 .arg("composition_source_id", "u128")
                 .arg("author_id", "u128")
                 .push_block(
@@ -149,16 +160,47 @@ mod carousel {
     use super::impl_composition_type_manager;
 
     #[test]
-    fn add() {
+    fn construct_manager() {
         impl_composition_type_manager(
             CompositionCategory::Carousel(CarouselType::Basic),
             "CarouselBasicCreateReq",
             "super::carousel_basic",
         );
     }
+}
 
-    #[test]
-    fn delete() {
-        // panic!("Make this test fail");
+use std::any::Any;
+
+pub trait A {
+    fn as_any(&self) -> &dyn Any;
+}
+
+pub struct B;
+
+impl A for B {
+    fn as_any(&self) -> &dyn Any {
+        self
     }
+}
+
+pub trait CarouselRelated {
+    fn as_any(&self) -> &dyn Any;
+}
+
+impl CarouselRelated for CarouselBasicCreateReq {
+    fn as_any(&self) -> &dyn Any {
+        self
+    }
+}
+
+fn main() {
+    let a: Box<dyn A> = Box::new(B);
+    // The indirection through `as_any` is because using `downcast_ref`
+    // on `Box<A>` *directly* only lets us downcast back to `&A` again.
+    // The method ensures we get an `Any` vtable that lets us downcast
+    // back to the original, concrete type.
+    let b: &B = match a.as_any().downcast_ref::<B>() {
+        Some(b) => b,
+        None => panic!("&a isn't a B!"),
+    };
 }

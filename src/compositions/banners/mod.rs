@@ -1,8 +1,10 @@
-use strum_macros::{EnumIter, EnumString};
+use strum_macros::EnumIter;
+use strum_macros::EnumString;
 
 use self::banner_basic::BannerCreateReq;
 
-use super::{texts::CompositionTypeManager, UpdateDataOfComposition};
+use super::texts::CompositionTypeManager;
+use super::UpdateDataOfComposition;
 
 pub mod banner_basic;
 
@@ -12,16 +14,7 @@ pub enum BannerType {
     SomeOtherComp,
 }
 
-// move to separate file
-// impl std::fmt::Display for BannerType {
-//     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-//         // write!(f, "{}", self)
-//         write!(f, "{}", self)
-//     }
-// }
-
-pub struct BannerManager {}
-
+pub struct BannerManager;
 // impl CompositionTypeManager<BannerType, BannerCreateReq> for BannerManager {
 //     // pub fn new() -> Self {
 //     //     Self {}

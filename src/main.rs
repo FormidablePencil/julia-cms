@@ -12,7 +12,9 @@ use std::error::Error;
 use codegen::{Block, Function, Scope};
 use ipfsapi::IpfsApi;
 use julia_cms::{
-    compositions::{banners::BannerType, CompositionCategory},
+    compositions::{
+        banners::BannerType, carousels::CarouselType, texts::TextType, CompositionCategory,
+    },
     gencode::impl_composition_type_manager,
 };
 
@@ -40,7 +42,12 @@ fn ipfs_test() {
 }
 
 fn main() {
-    impl_composition_type_manager(CompositionCategory::Banner(BannerType::Basic))
+    // impl_composition_type_manager(CompositionCategory::Banner(BannerType::Basic));
+    // impl_composition_type_manager(
+    //     CompositionCategory::Carousel(CarouselType::Basic),
+    //     "BannerCreateReq",
+    // );
+    // impl_composition_type_manager(CompositionCategory::Text(TextType::Basic));
     // let banner_basic_arm = CrudOperation::Create.get_arms(
     //     "BannerType".to_string(),
     //     "Basic".to_string(),
