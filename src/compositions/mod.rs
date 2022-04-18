@@ -2,6 +2,14 @@ pub mod banners;
 pub mod carousels;
 pub mod texts;
 
+use strum_macros::{EnumIter, EnumString};
+
+use self::{
+    banners::{BannerManager, BannerType},
+    carousels::{CarouselManager, CarouselType},
+    texts::{text_basic::TextBasicCreateReq, CompositionTypeManager, TextManager, TextType},
+};
+
 pub struct UpdateDataOfComposition {
     update_data_of: u128,
     record_update: RecordUpdate,
@@ -29,12 +37,6 @@ pub enum CompositionCategory {
     Text(TextType),
 }
 
-use self::{
-    banners::{BannerManager, BannerType},
-    carousels::{CarouselManager, CarouselType},
-    texts::{text_basic::TextBasicCreateReq, CompositionTypeManager, TextManager, TextType},
-};
-
 impl CategoryManager {
     fn get_public(
         &self,
@@ -47,10 +49,9 @@ impl CategoryManager {
                 .carousel_manager
                 .get_public(comp_type, composition_source_id),
 
-            CompositionCategory::Banner(comp_type) => todo!(),/* self
-                .banner_manager
-                .get_public(comp_type, composition_source_id), */
-
+            CompositionCategory::Banner(comp_type) => todo!(), /* self
+            .banner_manager
+            .get_public(comp_type, composition_source_id), */
             CompositionCategory::Text(comp_type) => self
                 .text_manager
                 .get_public(comp_type, composition_source_id),

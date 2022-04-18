@@ -1,5 +1,7 @@
 pub mod text_basic;
 
+use strum_macros::{EnumIter, EnumString};
+
 use crate::compositions::UpdateDataOfComposition;
 
 use self::text_basic::TextBasicCreateReq;
@@ -30,6 +32,7 @@ pub trait CompositionTypeManager<CompositionType, CreateRequest> {
 
 pub struct TextManager {}
 
+#[derive(Debug, EnumIter, EnumString)]
 pub enum TextType {
     TextBasic,
 }

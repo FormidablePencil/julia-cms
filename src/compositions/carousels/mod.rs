@@ -1,3 +1,5 @@
+use strum_macros::{EnumString, EnumIter};
+
 use self::carousel_basic::CarouselBasicCreateReq;
 
 use super::{texts::CompositionTypeManager, UpdateDataOfComposition};
@@ -6,6 +8,7 @@ pub mod carousel_basic;
 pub mod carousel_blurred_overlay;
 pub mod carousel_of_images;
 
+#[derive(Debug, EnumIter, EnumString)]
 pub enum CarouselType {
     Basic,
     BlurredOverlay,

@@ -11,18 +11,17 @@ use std::error::Error;
 
 use codegen::{Block, Function, Scope};
 use ipfsapi::IpfsApi;
-use julia_cms::gencode::impl_composition_type_manager;
+use julia_cms::{
+    compositions::{banners::BannerType, CompositionCategory},
+    gencode::impl_composition_type_manager,
+};
 
 // use julia_cms::compositions::{
 //     banners::{banner_basic::BannerCreateReq, BannerManager, BannerType},
 //     carousels::carousel_blurred_overlay::get_public,
 // };
 mod compositions;
-
-use crate::compositions::carousels::carousel_basic;
-use strum::IntoEnumIterator; // 0.17.1
-use strum_macros::EnumIter; // 0.17.1
-                            // std::io::Read
+// std::io::Read
 
 fn ipfs_test() {
     // let api = IpfsApi::new("127.0.0.1", 5001);
@@ -41,7 +40,7 @@ fn ipfs_test() {
 }
 
 fn main() {
-    impl_composition_type_manager()
+    impl_composition_type_manager(CompositionCategory::Banner(BannerType::Basic))
     // let banner_basic_arm = CrudOperation::Create.get_arms(
     //     "BannerType".to_string(),
     //     "Basic".to_string(),
