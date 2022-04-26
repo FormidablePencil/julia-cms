@@ -1,14 +1,12 @@
 use std::any::Any;
 
-use strum_macros::{EnumIter, EnumString};
+use super::{texts::CompositionTypeManager, UpdateDataOfComposition};
 
 use self::{
     carousel_basic::CarouselBasicCreateReq,
     carousel_blurred_overlay::CarouselBlurredOverlayCreateReq,
     carousel_images::CarouselOfImagesCreateReq, carousel_type::CarouselType,
 };
-
-use super::{texts::CompositionTypeManager, UpdateDataOfComposition};
 
 pub mod carousel_basic;
 pub mod carousel_blurred_overlay;
@@ -20,10 +18,6 @@ pub mod manager;
 pub struct CarouselManager {}
 
 impl CompositionTypeManager<CarouselType, CarouselBasicCreateReq> for CarouselManager {
-    // use crate::compositions::UpdateDataOfComposition;
-
-    // use super::carousel_basic::{self, CarouselBasicCreateReq};
-
     fn get_public(&self, comp_type: CarouselType, composition_source_id: u128) {
         match comp_type {
             CarouselType::Basic => carousel_basic::get_public(composition_source_id),

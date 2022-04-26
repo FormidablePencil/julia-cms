@@ -25,9 +25,7 @@ impl CrudOperation {
             CrudOperation::GetPublic => "(composition_source_id)".to_string(),
             CrudOperation::GetPrivate => "(composition_source_id, author_id)".to_string(),
             CrudOperation::Create => "(create_request, layout_id, author_id)".to_string(),
-            CrudOperation::Update => {
-                "(composition_update_que, composition_source_id, author_id)".to_string()
-            }
+            CrudOperation::Update => "(composition_update_que, composition_source_id, author_id)".to_string(),
             CrudOperation::Delete => "(composition_source_id, author_id)".to_string(),
         }
     }

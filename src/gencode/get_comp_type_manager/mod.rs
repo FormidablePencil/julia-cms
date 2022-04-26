@@ -1,9 +1,9 @@
 use std::{fs::File, io::Write};
 
-pub mod crud_operation;
 pub mod arms_block;
+pub mod crud_operation;
 pub mod helpers;
-pub mod util;
+pub mod import_mods;
 
 pub fn write_to_file(file_name: &str, contents: &mut String) -> std::io::Result<()> {
     let mut file = File::create(file_name)?;

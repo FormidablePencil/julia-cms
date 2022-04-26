@@ -11,7 +11,7 @@ use std::mem;
 use strum_macros::{EnumIter, EnumString};
 
 use self::{
-    banners::{BannerManager, BannerType},
+    banners::{banner_type::BannerType, BannerManager},
     carousels::{carousel_type::CarouselType, CarouselManager},
     texts::{text_basic::TextBasicCreateReq, CompositionTypeManager, TextManager, TextType},
 };
@@ -44,12 +44,12 @@ pub enum CompositionCategory {
     Text(TextType),
 }
 
-enum OptionCompositionTypes {
-    Carousel(carousels::carousel_type::CarouselTypeIter),
-    Banner(banners::BannerTypeIter),
-    Text(texts::TextTypeIter),
-    None,
-}
+// enum OptionCompositionTypes {
+//     Carousel(carousels::carousel_type::CarouselTypeIter),
+//     Banner(banners::BannerTypeIter),
+//     Text(texts::TextTypeIter),
+//     None,
+// }
 
 // impl CompositionCategory {
 //     pub fn iterator() -> Iter<'static, CompositionCategory> {

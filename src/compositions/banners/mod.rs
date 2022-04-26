@@ -7,12 +7,8 @@ use super::texts::CompositionTypeManager;
 use super::UpdateDataOfComposition;
 
 pub mod banner_basic;
-
-#[derive(Debug, EnumIter, EnumString)]
-pub enum BannerType {
-    Basic,
-    SomeOtherComp,
-}
+mod manager;
+pub mod banner_type;
 
 pub struct BannerManager;
 // impl CompositionTypeManager<BannerType, BannerCreateReq> for BannerManager {

@@ -12,9 +12,7 @@ use std::error::Error;
 use codegen::{Block, Function, Scope};
 use ipfsapi::IpfsApi;
 use julia_cms::{
-    compositions::{
-        banners::BannerType, texts::TextType, CompositionCategory,
-    },
+    compositions::{texts::TextType, CompositionCategory},
     gencode::impl_composition_type_manager,
 };
 
