@@ -1,14 +1,15 @@
-use codegen::{Scope, Block};
+use codegen::{Block, Scope};
 
 use crate::{
     compositions::CompositionCategory,
-    gencode::get_comp_type_manager::{helpers::{get_composition_name, get_composition_create_request}, crud_operation::CrudOperation, arms_block::ArmsBlock},
+    gencode::gen_managers::{arms_block::ArmsBlock, crud_operation::CrudOperation, helpers::{get_composition_create_request, get_composition_name}},
 };
+use crate::gencode::gen_managers::helpers::get_composition_create_request;
 
 pub fn gen_manager(scope: &mut Scope, composition_category: CompositionCategory) {
     let composition_type = get_composition_name(&composition_category, true);
     let composition_name = get_composition_name(&composition_category, false);
-    let (_, create_request) = get_composition_create_request(&composition_category);
+    let (_, create_request) = get_composition_create_request::get_composition_create_request(&composition_category);
     let generics = format!("{composition_type}, {create_request}");
 
     scope
@@ -45,6 +46,7 @@ pub fn gen_manager(scope: &mut Scope, composition_category: CompositionCategory)
         .push_fn(
             Scope::new()
                 .new_fn("create")
+                .ret("Option<u128>")
                 .arg_ref_self()
                 .arg("composition_type", &composition_type)
                 .arg("create_request", "Box<dyn Any>")
@@ -69,6 +71,7 @@ pub fn gen_manager(scope: &mut Scope, composition_category: CompositionCategory)
         .push_fn(
             Scope::new()
                 .new_fn("update")
+                .ret("bool")
                 .arg_ref_self()
                 .arg("composition_type", &composition_type)
                 .arg("composition_update_que", "Vec<UpdateDataOfComposition>")
@@ -84,6 +87,7 @@ pub fn gen_manager(scope: &mut Scope, composition_category: CompositionCategory)
         .push_fn(
             Scope::new()
                 .new_fn("delete")
+                .ret("bool")
                 .arg_ref_self()
                 .arg("composition_type", &composition_type)
                 .arg("composition_source_id", "u128")

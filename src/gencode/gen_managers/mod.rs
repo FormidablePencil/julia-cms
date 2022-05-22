@@ -3,20 +3,17 @@ use std::{fs::File, io::Write};
 mod arms_block;
 mod crud_operation;
 mod gen_manager;
-mod helpers;
 mod import_mods;
 mod manager_dependents;
+mod helpers;
 
-use codegen::{Block, Scope};
+use codegen::Scope;
 
-use crate::gencode::get_comp_type_manager::helpers::get_composition_create_request;
-use crate::gencode::get_comp_type_manager::import_mods::import_composition_mods;
 use crate::{
     compositions::CompositionCategory,
-    gencode::get_comp_type_manager::{
+    gencode::gen_managers::{
         arms_block::ArmsBlock,
-        crud_operation::CrudOperation,
-        helpers::{get_composition_name, import_composition_models},
+        helpers::get_composition_name,
     },
     get_composition_name,
 };

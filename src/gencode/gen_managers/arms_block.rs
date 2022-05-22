@@ -3,7 +3,7 @@ use strum::IntoEnumIterator;
 
 use crate::compositions::banners::banner_type::BannerType;
 use crate::compositions::texts::manager::TextType;
-use crate::gencode::get_comp_type_manager::helpers::get_composition_create_request;
+use crate::gencode::gen_managers::helpers::get_composition_create_request;
 use crate::{
     compositions::{carousels::carousel_type::CarouselType, CompositionCategory},
     get_composition_name,
@@ -107,7 +107,7 @@ impl ArmsBlock for Block {
         composition_category: CompositionCategory,
     ) -> &mut Self {
         let comp_type_name = get_composition_name(&composition_category, true);
-        let (_, create_request) = get_composition_create_request(&composition_category);
+        let (_, create_request) = get_composition_create_request::get_composition_create_request(&composition_category);
 
         let matcher = format!("{comp_type_name}::{enum_type_name} => match create_request.downcast_ref::<{create_request}>()");
 

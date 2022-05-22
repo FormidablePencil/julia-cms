@@ -3,7 +3,10 @@ use codegen::Scope;
 use crate::{compositions::CompositionCategory, get_composition_name};
 
 use super::{
-    helpers::{get_composition_create_request, get_composition_name, import_composition_models},
+    helpers::{
+        get_composition_create_request, get_composition_name, get_composition_response_enum,
+        import_composition_models,
+    },
     import_mods::import_composition_mods,
 };
 
@@ -53,8 +56,9 @@ pub fn manager_dependents(scope: &mut Scope, composition_category: CompositionCa
     // todo - static data
     scope.import("banner_basic", "BannerRes");
     scope
-        .new_enum("BannerResponse")
+        .new_enum(get_composition_response_enum(&composition_category).as_str())
         .vis("pub")
+        // todo map through this
         .new_variant("Basic(Option<BannerRes>)");
     // todo - static data
 }
