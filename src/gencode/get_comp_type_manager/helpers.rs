@@ -2,9 +2,8 @@ use codegen::Scope;
 use strum::IntoEnumIterator;
 
 use crate::compositions::banners::banner_type::BannerType;
-use crate::compositions::{
-    carousels::carousel_type::CarouselType, texts::TextType, CompositionCategory,
-};
+use crate::compositions::texts::manager::TextType;
+use crate::compositions::{carousels::carousel_type::CarouselType, CompositionCategory};
 
 fn iterate_over_all_enums_of_composition_category(
     composition_category: &CompositionCategory,
@@ -85,7 +84,7 @@ pub fn get_mod(composition_category: &CompositionCategory) -> String {
             BannerType::Basic => "banner_basic".to_string(),
         },
         CompositionCategory::Text(comp_type) => match comp_type {
-            crate::compositions::texts::TextType::Basic => "text_basic".to_string(),
+            TextType::Basic => "text_basic".to_string(),
         },
     }
 }

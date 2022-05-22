@@ -2,8 +2,7 @@ use codegen::Scope;
 use strum::IntoEnumIterator;
 
 use crate::compositions::{
-    banners::banner_type::BannerType, carousels::carousel_type::CarouselType, texts::TextType,
-    CompositionCategory,
+    banners::banner_type::BannerType, carousels::carousel_type::CarouselType, CompositionCategory,
 };
 
 use super::helpers::get_mod;

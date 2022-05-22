@@ -5,13 +5,13 @@ use crate::compositions::banners::banner_basic::BannerCreateReq;
 use crate::compositions::manager_impl::CompositionTypeManager;
 use std::any::Any;
 
-pub struct BannerTypesManager;
+pub struct BannerManager;
 
 pub enum BannerResponse {
     Basic(Option<BannerCreateRes>),
 }
 
-impl CompositionTypeManager<BannerType, BannerCreateReq, BannerResponse> for BannerTypesManager {
+impl CompositionTypeManager<BannerType, BannerCreateReq, BannerResponse> for BannerManager {
     fn get_public(
         &self,
         composition_type: BannerType,

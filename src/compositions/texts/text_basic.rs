@@ -11,7 +11,11 @@ pub fn get_private(composition_source_id: u128, author_id: u128) -> Option<TextB
     todo!()
 }
 
-pub fn create(create_request: TextBasicCreateReq, layout_id: u128, author_id: u128) -> bool {
+pub fn create(
+    create_request: TextBasicCreateReq,
+    layout_id: u128,
+    author_id: u128,
+) -> Option<u128> {
     todo!()
 }
 

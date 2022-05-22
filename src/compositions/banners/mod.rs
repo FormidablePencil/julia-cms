@@ -1,15 +1,9 @@
-use strum_macros::EnumIter;
-use strum_macros::EnumString;
-
-use self::banner_basic::BannerCreateReq;
-
 use super::UpdateDataOfComposition;
 
 pub mod banner_basic;
-mod manager;
+pub mod manager;
 pub mod banner_type;
 
-pub struct BannerManager;
 // impl CompositionTypeManager<BannerType, BannerCreateReq> for BannerManager {
 //     // pub fn new() -> Self {
 //     //     Self {}

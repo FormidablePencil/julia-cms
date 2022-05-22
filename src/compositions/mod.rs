@@ -6,10 +6,14 @@ pub mod texts;
 extern crate proc_macro;
 
 use self::{
-    banners::{banner_type::BannerType, BannerManager},
-    carousels::{carousel_type::CarouselType, CarouselManager},
+    banners::{
+        banner_type::BannerType,
+        manager::{BannerManager, BannerResponse},
+    },
+    carousels::{carousel_type::CarouselType, manager::CarouselResponse, CarouselManager},
+    manager_impl::CompositionTypeManager,
     texts::{
-        manager::{TextManager, TextType},
+        manager::{TextManager, TextResponse, TextType},
         text_basic::TextBasicCreateReq,
     },
 };
@@ -60,24 +64,32 @@ pub enum CompositionCategory {
 //     }
 // }
 
+enum CategoryResponse {
+    Carousel(CarouselResponse),
+    Banner(BannerResponse),
+    Text(TextResponse),
+}
+
 impl CategoryManager {
     fn get_public(
         &self,
         comp_category: CompositionCategory,
         comp_type: u128,
         composition_source_id: u128,
-    ) {
+    ) -> CategoryResponse {
         match comp_category {
-            CompositionCategory::Carousel(comp_type) => self
-                .carousel_manager
-                .get_public(comp_type, composition_source_id),
-
-            CompositionCategory::Banner(comp_type) => todo!(), /* self
-            .banner_manager
-            .get_public(comp_type, composition_source_id), */
-            CompositionCategory::Text(comp_type) => self
-                .text_manager
-                .get_public(comp_type, composition_source_id),
+            CompositionCategory::Carousel(comp_type) => CategoryResponse::Carousel(
+                self.carousel_manager
+                    .get_public(comp_type, composition_source_id),
+            ),
+            CompositionCategory::Banner(comp_type) => CategoryResponse::Banner(
+                self.banner_manager
+                    .get_public(comp_type, composition_source_id),
+            ),
+            CompositionCategory::Text(comp_type) => CategoryResponse::Text(
+                self.text_manager
+                    .get_public(comp_type, composition_source_id),
+            ),
         }
     }
 
@@ -86,14 +98,20 @@ impl CategoryManager {
         comp_category: CompositionCategory,
         composition_source_id: u128,
         author_id: u128,
-    ) {
+    ) -> CategoryResponse {
         match comp_category {
-            CompositionCategory::Text(comp_type) => {
+            CompositionCategory::Carousel(comp_type) => CategoryResponse::Carousel(
+                self.carousel_manager
+                    .get_private(comp_type, composition_source_id, author_id),
+            ),
+            CompositionCategory::Banner(comp_type) => CategoryResponse::Banner(
+                self.banner_manager
+                    .get_private(comp_type, composition_source_id, author_id),
+            ),
+            CompositionCategory::Text(comp_type) => CategoryResponse::Text(
                 self.text_manager
-                    .get_private(comp_type, composition_source_id, author_id)
-            }
-            CompositionCategory::Carousel(_) => todo!(),
-            CompositionCategory::Banner(_) => todo!(),
+                    .get_private(comp_type, composition_source_id, author_id),
+            ),
         }
     }
 
