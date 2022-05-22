@@ -35,4 +35,3 @@ pub trait CompositionTypeManager<CompositionType, CreateRequest, Response> {
         author_id: u128,
     ) -> bool;
 }
-

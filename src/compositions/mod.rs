@@ -82,10 +82,11 @@ impl CategoryManager {
                 self.carousel_manager
                     .get_public(comp_type, composition_source_id),
             ),
-            CompositionCategory::Banner(comp_type) => CategoryResponse::Banner(
-                self.banner_manager
-                    .get_public(comp_type, composition_source_id),
-            ),
+            CompositionCategory::Banner(_) => todo!(),
+            // CompositionCategory::Banner(comp_type) => CategoryResponse::Banner(
+            //     self.banner_manager
+            //         .get_public(comp_type, composition_source_id),
+            // ),
             CompositionCategory::Text(comp_type) => CategoryResponse::Text(
                 self.text_manager
                     .get_public(comp_type, composition_source_id),
@@ -104,10 +105,11 @@ impl CategoryManager {
                 self.carousel_manager
                     .get_private(comp_type, composition_source_id, author_id),
             ),
-            CompositionCategory::Banner(comp_type) => CategoryResponse::Banner(
-                self.banner_manager
-                    .get_private(comp_type, composition_source_id, author_id),
-            ),
+            CompositionCategory::Banner(_) => todo!(),
+            // CompositionCategory::Banner(comp_type) => CategoryResponse::Banner(
+            //     self.banner_manager
+            //         .get_private(comp_type, composition_source_id, author_id),
+            // ),
             CompositionCategory::Text(comp_type) => CategoryResponse::Text(
                 self.text_manager
                     .get_private(comp_type, composition_source_id, author_id),

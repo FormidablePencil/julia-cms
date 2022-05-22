@@ -11,7 +11,7 @@ use std::error::Error;
 
 use codegen::{Block, Function, Scope};
 use ipfsapi::IpfsApi;
-use julia_cms::{compositions::CompositionCategory, gencode::impl_composition_type_manager};
+use julia_cms::compositions::CompositionCategory;
 
 // use julia_cms::compositions::{
 //     banners::{banner_basic::BannerCreateReq, BannerManager, BannerType},
