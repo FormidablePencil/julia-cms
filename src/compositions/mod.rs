@@ -1,19 +1,17 @@
 pub mod banners;
 pub mod carousels;
+pub mod manager_impl;
 pub mod texts;
 
 extern crate proc_macro;
 
-use proc_macro::TokenStream;
-use strum::IntoEnumIterator;
-
-use std::mem;
-use strum_macros::{EnumIter, EnumString};
-
 use self::{
     banners::{banner_type::BannerType, BannerManager},
     carousels::{carousel_type::CarouselType, CarouselManager},
-    texts::{text_basic::TextBasicCreateReq, CompositionTypeManager, TextManager, TextType},
+    texts::{
+        manager::{TextManager, TextType},
+        text_basic::TextBasicCreateReq,
+    },
 };
 
 pub struct UpdateDataOfComposition {

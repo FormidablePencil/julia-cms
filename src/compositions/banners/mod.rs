@@ -3,7 +3,6 @@ use strum_macros::EnumString;
 
 use self::banner_basic::BannerCreateReq;
 
-use super::texts::CompositionTypeManager;
 use super::UpdateDataOfComposition;
 
 pub mod banner_basic;

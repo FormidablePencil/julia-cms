@@ -40,6 +40,8 @@ fn ipfs_test() {
 }
 
 fn main() {
+    // ~ CRUD components
+
     // impl_composition_type_manager(CompositionCategory::Banner(BannerType::Basic));
     // impl_composition_type_manager(
     //     CompositionCategory::Carousel(CarouselType::Basic),

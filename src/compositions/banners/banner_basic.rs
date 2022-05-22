@@ -2,14 +2,28 @@ use crate::compositions::UpdateDataOfComposition;
 
 #[derive(Debug)]
 pub struct BannerCreateReq {}
+pub struct BannerCreateRes {}
 
-pub fn get_public(composition_source_id: u128) {}
-pub fn get_private(composition_source_id: u128, author_id: u128) {}
-pub fn create(create_request: &BannerCreateReq, layout_id: u128, author_id: u128) {}
+pub fn get_public(composition_source_id: u128) -> Option<BannerCreateRes> {
+    todo!()
+}
+
+pub fn get_private(composition_source_id: u128, author_id: u128) -> Option<BannerCreateRes> {
+    todo!()
+}
+
+pub fn create(create_request: &BannerCreateReq, layout_id: u128, author_id: u128) -> Option<u128> {
+    todo!()
+}
+
 pub fn update(
     composition_update_que: Vec<UpdateDataOfComposition>,
     composition_source_id: u128,
     author_id: u128,
-) {
+) -> bool {
+    todo!()
 }
-pub fn delete(composition_source_id: u128, author_id: u128) {}
+
+pub fn delete(composition_source_id: u128, author_id: u128) -> bool {
+    todo!()
+}

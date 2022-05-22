@@ -1,15 +1,13 @@
 use codegen::Block;
 use strum::IntoEnumIterator;
 
+use crate::compositions::banners::banner_type::BannerType;
+use crate::compositions::texts::manager::TextType;
+use crate::gencode::get_comp_type_manager::helpers::get_composition_create_request;
 use crate::{
-    compositions::{
-        carousels::carousel_type::CarouselType, CompositionCategory,
-        texts::TextType,
-    },
+    compositions::{carousels::carousel_type::CarouselType, CompositionCategory},
     get_composition_name,
 };
-use crate::compositions::banners::banner_type::BannerType;
-use crate::gencode::get_comp_type_manager::helpers::get_composition_create_request;
 
 use super::{
     crud_operation::CrudOperation,

@@ -1,4 +1,4 @@
-use carouselF::{CarouselDT};
+use carouselF::CarouselDT;
 
 mod english {
     fn getPublicLayoutOfCompositions() {}
