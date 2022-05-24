@@ -1,104 +1,97 @@
-use codegen::{Block, Scope};
+use codegen::{Block, Function, Scope};
 
 use crate::{
     compositions::CompositionCategory,
-    gencode::gen_managers::{arms_block::ArmsBlock, crud_operation::CrudOperation, helpers::{get_composition_create_request, get_composition_name}},
+    gencode::gen_managers::{builder::ArmsBlock, helpers::get_composition_paths, manager_method::ManagerMethod},
 };
-use crate::gencode::gen_managers::helpers::get_composition_create_request;
+use crate::gencode::gen_managers::builder::ArgFunction;
+use crate::gencode::gen_managers::helpers::get_all_composition_res_variants_enums::get_composition_response_enum;
+use crate::gencode::gen_managers::helpers::get_composition_name::get_composition_name;
 
-pub fn gen_manager(scope: &mut Scope, composition_category: CompositionCategory) {
+pub fn gen_manager(scope: &mut Scope, composition_category: &CompositionCategory) {
     let composition_type = get_composition_name(&composition_category, true);
     let composition_name = get_composition_name(&composition_category, false);
-    let (_, create_request) = get_composition_create_request::get_composition_create_request(&composition_category);
-    let generics = format!("{composition_type}, {create_request}");
+    let (_, create_request) = get_composition_paths::get_composition_create_request_path(&composition_category);
+    let composition_response = get_composition_response_enum(&composition_category);
+    let generics = format!("{composition_type}, {create_request}, {composition_response}");
+
+    let gen_method = get_method(composition_category);
 
     scope
-        .new_impl(format!("{}sManager", composition_name).as_str())
+        .new_impl(format!("{}Manager", composition_name).as_str())
         .impl_trait(format!("CompositionTypeManager<{}>", generics))
         .push_fn(
-            Scope::new()
-                .new_fn("get_public")
-              .ret("bool")  
-                .arg_ref_self()
-                .arg("composition_type", &composition_type)
-                .arg("composition_source_id", "u128")
-                .push_block(
-                    Block::new("match composition_type")
-                        .add_arms(CrudOperation::GetPublic, &composition_category)
-                        .to_owned(),
-                )
-                .to_owned(),
+            gen_method(
+                ManagerMethod::GetPublic,
+                vec![
+                    ("composition_type", &composition_type),
+                    ("composition_source_id", "u128"),
+                ],
+            )
         )
         .push_fn(
-            Scope::new()
-                .new_fn("get_private")
-                .arg_ref_self()
-                .arg("composition_type", &composition_type)
-                .arg("composition_source_id", "u128")
-                .arg("author_id", "u128")
-                .push_block(
-                    Block::new("match composition_type")
-                        .add_arms(CrudOperation::GetPrivate, &composition_category)
-                        .to_owned(),
-                )
-                .to_owned(),
+            gen_method(
+                ManagerMethod::GetPrivate,
+                vec![
+                    ("composition_type", &composition_type),
+                    ("composition_source_id", "u128"),
+                    ("author_id", "u128"),
+                ],
+            )
         )
         .push_fn(
-            Scope::new()
-                .new_fn("create")
-                .ret("Option<u128>")
-                .arg_ref_self()
-                .arg("composition_type", &composition_type)
-                .arg("create_request", "Box<dyn Any>")
-                .arg("layout_id", "u128")
-                .arg("author_id", "u128")
-                .push_block(Block::new("match composition_type")
-                    .add_arms_for_create(&CrudOperation::Update, &composition_type, &composition_category).to_owned()
-                ).to_owned()
-            // .push_block(
-            //     Block::new("CarouselType::Basic => match create_request.downcast_ref::<CarouselBasicCreateReq>()")
-            //         .line("Some(req) => carousel_basic::create(req, layout_id, author_id),")
-            //         .line("None => panic!()")
-            //         .to_owned()
-            //         // CarouselType::Basic => match create_request.downcast_ref::<CarouselBasicCreateReq>() {
-            //         //     Some(req) => carousel_basic::create(req, layout_id, author_id),
-            //         //     None => panic!("&a isn't a B!"),
-            //         // },
-            //         // .add_arms(CrudOperation::Create, &composition_category)
-            // ).to_owned())
-            // .to_owned(),
+            gen_method(
+                ManagerMethod::Create,
+                vec![
+                    ("composition_type", &composition_type),
+                    ("create_request", "Box<dyn Any>"),
+                    ("layout_id", "u128"),
+                    ("author_id", "u128"),
+                ],
+            ),
         )
         .push_fn(
-            Scope::new()
-                .new_fn("update")
-                .ret("bool")
-                .arg_ref_self()
-                .arg("composition_type", &composition_type)
-                .arg("composition_update_que", "Vec<UpdateDataOfComposition>")
-                .arg("composition_source_id", "u128")
-                .arg("author_id", "u128")
-                .push_block(
-                    Block::new("match composition_type")
-                        .add_arms(CrudOperation::Update, &composition_category)
-                        .to_owned(),
-                )
-                .to_owned(),
+            gen_method(
+                ManagerMethod::Update,
+                vec![
+                    ("composition_type", &composition_type),
+                    ("composition_update_que", "Vec<UpdateDataOfComposition>"),
+                    ("composition_source_id", "u128"),
+                    ("author_id", "u128"),
+                ],
+            )
         )
         .push_fn(
-            Scope::new()
-                .new_fn("delete")
-                .ret("bool")
-                .arg_ref_self()
-                .arg("composition_type", &composition_type)
-                .arg("composition_source_id", "u128")
-                .arg("author_id", "u128")
-                .push_block(
-                    Block::new("match composition_type")
-                        .add_arms(CrudOperation::Delete, &composition_category)
-                        .to_owned(),
-                )
-                .to_owned(),
+            gen_method(
+                ManagerMethod::Delete,
+                vec![
+                    ("composition_type", &composition_type),
+                    ("composition_source_id", "u128"),
+                    ("author_id", "u128"),
+                ],
+            )
         );
 
     println!("{}", scope.to_string());
+}
+
+fn get_method<'a>(composition_category: &'a CompositionCategory) -> Box<dyn Fn(ManagerMethod, Vec<(&str, &str)>) -> Function + 'a> {
+    let composition_type = get_composition_name(&composition_category, true);
+    let composition_name = get_composition_name(&composition_category, false);
+    let (_, create_request) = get_composition_paths::get_composition_create_request_path(&composition_category);
+    let composition_response = get_composition_response_enum(&composition_category);
+
+    Box::new(move |method: ManagerMethod, args: Vec<(&str, &str)>| {
+        Scope::new()
+            .new_fn(&method.get_method_name().as_str())
+            .ret(&composition_response)
+            .arg_ref_self()
+            .add_args(args)
+            .push_block(
+                Block::new("match composition_type")
+                    .add_arms(&method, composition_category, &method)
+                    .to_owned(),
+            )
+            .to_owned()
+    })
 }

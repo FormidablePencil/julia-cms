@@ -1,5 +1,5 @@
-use crate::compositions::banners::banner_type::BannerType;
-use crate::compositions::carousels::carousel_type::CarouselType;
+use crate::compositions::banners::banner_enums::BannerType;
+use crate::compositions::carousels::carousel_enums::CarouselType;
 use crate::compositions::CompositionCategory;
 use crate::gencode::gen_managers::helpers::get_mod;
 

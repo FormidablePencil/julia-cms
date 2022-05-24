@@ -1,21 +1,11 @@
 use std::any::Any;
 
-use strum_macros::{EnumIter, EnumString};
-
 use crate::compositions::{manager_impl::CompositionTypeManager, UpdateDataOfComposition};
+use crate::compositions::texts::text_enums::{TextResponse, TextType};
 
-use super::text_basic::{self, TextBasicCreateReq, TextBasicRes};
+use super::text_basic::{self, TextBasicCreateReq};
 
-pub struct TextManager {}
-
-#[derive(Debug, EnumIter, EnumString)]
-pub enum TextType {
-    Basic,
-}
-
-pub enum TextResponse {
-    Basic(Option<TextBasicRes>),
-}
+pub struct TextManager;
 
 impl CompositionTypeManager<TextType, TextBasicCreateReq, TextResponse> for TextManager {
     // pub fn new() -> Self {
@@ -48,7 +38,7 @@ impl CompositionTypeManager<TextType, TextBasicCreateReq, TextResponse> for Text
         create_request: Box<dyn Any>,
         layout_id: u128,
         author_id: u128,
-    ) -> Option<u128> {
+    ) -> TextResponse {
         todo!()
         // match comp_type {
         //     TextType::Basic => text_basic::create(create_request, layout_id, author_id),
@@ -61,15 +51,17 @@ impl CompositionTypeManager<TextType, TextBasicCreateReq, TextResponse> for Text
         composition_update_que: Vec<UpdateDataOfComposition>,
         layout_id: u128,
         author_id: u128,
-    ) -> bool {
-        match comp_type {
-            TextType::Basic => text_basic::update(composition_update_que, layout_id, author_id),
-        }
+    ) -> TextResponse {
+        todo!()
+        // match comp_type {
+        //     TextType::Basic => text_basic::update(composition_update_que, layout_id, author_id),
+        // }
     }
 
-    fn delete(&self, comp_type: TextType, composition_source_id: u128, author_id: u128) -> bool {
-        match comp_type {
-            TextType::Basic => text_basic::delete(composition_source_id, author_id),
-        }
+    fn delete(&self, comp_type: TextType, composition_source_id: u128, author_id: u128) -> TextResponse {
+        todo!()
+        // match comp_type {
+        //     TextType::Basic => text_basic::delete(composition_source_id, author_id),
+        // }
     }
 }

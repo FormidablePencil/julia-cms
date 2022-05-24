@@ -1,8 +1,8 @@
 use strum::IntoEnumIterator;
 
-use crate::compositions::banners::banner_type::BannerType;
-use crate::compositions::texts::manager::TextType;
-use crate::compositions::{carousels::carousel_type::CarouselType, CompositionCategory};
+use crate::compositions::{carousels::carousel_enums::CarouselType, CompositionCategory};
+use crate::compositions::banners::banner_enums::BannerType;
+use crate::compositions::texts::text_enums::TextType;
 
 pub fn iterate_over_all_enums_of_composition_category(
     composition_category: &CompositionCategory,
@@ -31,23 +31,22 @@ pub fn iterate_over_all_enums_of_composition_category(
 mod tests {
     use codegen::Scope;
 
-    use crate::compositions::carousels::carousel_type::CarouselType;
+    use crate::compositions::carousels::carousel_enums::CarouselType;
     use crate::compositions::CompositionCategory;
-    use crate::gencode::gen_managers::helpers::{
-        get_composition_create_request, import_composition_models,
-    };
+    use crate::gencode::gen_managers::helpers::get_composition_paths;
     use crate::gencode::gen_managers::helpers::get_composition_metadata::get_composition_metadata;
+    use crate::gencode::gen_managers::import_dependencies::import_composition_models::import_composition_models;
 
     #[test]
     fn get_composition_create_request_test() {
         let res =
-            get_composition_create_request::get_composition_create_request(&CompositionCategory::Carousel(CarouselType::Basic));
+            get_composition_paths::get_composition_create_request_path(&CompositionCategory::Carousel(CarouselType::Basic));
         print!("{}, {}", res.0, res.1);
     }
 
     #[test]
     fn get_composition_metadata_test() {
-        let res = get_composition_metadata( &CompositionCategory::Carousel(CarouselType::Basic));
+        let res = get_composition_metadata(&CompositionCategory::Carousel(CarouselType::Basic));
         assert_eq!(
             format!("{}, {}", res.0, res.1),
             "carousel_basic, CarouselBasicCreateReq"

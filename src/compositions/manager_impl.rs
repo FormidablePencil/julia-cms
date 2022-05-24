@@ -18,7 +18,7 @@ pub trait CompositionTypeManager<CompositionType, CreateRequest, Response> {
         create_request: Box<dyn Any>,
         layout_id: u128,
         author_id: u128,
-    ) -> Option<u128>;
+    ) -> Response;
 
     fn update(
         &self,
@@ -26,12 +26,12 @@ pub trait CompositionTypeManager<CompositionType, CreateRequest, Response> {
         composition_update_que: Vec<UpdateDataOfComposition>,
         layout_id: u128,
         author_id: u128,
-    ) -> bool;
+    ) -> Response;
 
     fn delete(
         &self,
         comp_type: CompositionType,
         composition_source_id: u128,
         author_id: u128,
-    ) -> bool;
+    ) -> Response;
 }

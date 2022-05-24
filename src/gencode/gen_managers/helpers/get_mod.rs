@@ -1,7 +1,7 @@
-use crate::compositions::banners::banner_type::BannerType;
-use crate::compositions::carousels::carousel_type::CarouselType;
+use crate::compositions::banners::banner_enums::BannerType;
+use crate::compositions::carousels::carousel_enums::CarouselType;
 use crate::compositions::CompositionCategory;
-use crate::compositions::texts::manager::TextType;
+use crate::compositions::texts::text_enums::TextType;
 
 // todo - implement a cleaner func. Use array with enum instead
 pub fn get_mod(composition_category: &CompositionCategory) -> String {

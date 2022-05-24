@@ -1,25 +1,19 @@
 use std::{fs::File, io::Write};
 
-mod arms_block;
-mod crud_operation;
-mod gen_manager;
-mod import_mods;
-mod manager_dependents;
-mod helpers;
-
 use codegen::Scope;
 
-use crate::{
-    compositions::CompositionCategory,
-    gencode::gen_managers::{
-        arms_block::ArmsBlock,
-        helpers::get_composition_name,
-    },
-    get_composition_name,
-};
+use crate::{compositions::CompositionCategory, get_composition_name};
+use crate::gencode::gen_managers::helpers::get_composition_name::get_composition_name;
 
 use self::gen_manager::gen_manager;
-use self::manager_dependents::manager_dependents;
+use self::gen_manager_dependencies::gen_manager_dependencies;
+
+mod builder;
+mod manager_method;
+mod gen_manager;
+mod gen_manager_dependencies;
+mod helpers;
+mod import_dependencies;
 
 // todo - move this outside of src and make sure this doesn't get added in build
 
@@ -35,10 +29,14 @@ pub fn impl_composition_type_manager(composition_category: CompositionCategory) 
     let model_name = format!("{composition_name}s");
 
     let mut scope = Scope::new();
+    scope.raw("\
+// ==============================================================================================
+//  Please don't edit this file directly. This file is auto generated.
+// ==============================================================================================");
 
-    manager_dependents(&mut scope, composition_category);
+    gen_manager_dependencies(&mut scope, &composition_category);
 
-    gen_manager(&mut scope, composition_category);
+    gen_manager(&mut scope, &composition_category);
 
     match write_to_file(
         format!("src/compositions/{}/manager.rs", model_name).as_str(),
@@ -51,7 +49,7 @@ pub fn impl_composition_type_manager(composition_category: CompositionCategory) 
 
 #[cfg(test)]
 mod carousel {
-    use crate::compositions::banners::banner_type::BannerType;
+    use crate::compositions::banners::banner_enums::BannerType;
     use crate::compositions::CompositionCategory;
 
     use super::impl_composition_type_manager;

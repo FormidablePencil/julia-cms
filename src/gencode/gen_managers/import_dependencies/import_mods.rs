@@ -2,10 +2,9 @@ use codegen::Scope;
 use strum::IntoEnumIterator;
 
 use crate::compositions::{
-    banners::banner_type::BannerType, carousels::carousel_type::CarouselType, CompositionCategory,
+    banners::banner_enums::BannerType, carousels::carousel_enums::CarouselType, CompositionCategory,
 };
-
-use super::helpers::get_mod;
+use crate::gencode::gen_managers::helpers::get_mod::get_mod;
 
 pub fn import_composition_mods(scope: &mut Scope, composition_category: &CompositionCategory) {
     match composition_category {
@@ -34,7 +33,7 @@ pub fn import_composition_mods(scope: &mut Scope, composition_category: &Composi
 mod tests {
     use codegen::Scope;
 
-    use crate::compositions::{carousels::carousel_type::CarouselType, CompositionCategory};
+    use crate::compositions::{carousels::carousel_enums::CarouselType, CompositionCategory};
 
     use super::import_composition_mods;
 
