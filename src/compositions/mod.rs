@@ -15,7 +15,6 @@ use self::{
     manager_impl::CompositionTypeManager,
     texts::{
         manager::TextManager,
-        text_basic::TextBasicCreateReq,
     },
 };
 
@@ -73,7 +72,6 @@ impl CategoryManager {
                 self.carousel_manager
                     .get_public(comp_type, composition_source_id)
             ),
-            // CompositionCategory::Banner(_) => todo!(),
             CompositionCategory::Banner(comp_type) => CategoryResponse::Banner(
                 self.banner_manager
                     .get_public(comp_type, composition_source_id),
@@ -96,7 +94,6 @@ impl CategoryManager {
                 self.carousel_manager
                     .get_private(comp_type, composition_source_id, author_id),
             ),
-            // CompositionCategory::Banner(_) => todo!(),
             CompositionCategory::Banner(comp_type) => CategoryResponse::Banner(
                 self.banner_manager
                     .get_private(comp_type, composition_source_id, author_id),
@@ -111,7 +108,6 @@ impl CategoryManager {
     fn create(
         &self,
         comp_category: CompositionCategory,
-        // create_request: TextBasicCreateReq,
         create_request: Box<dyn Any>,
         layout_id: u128,
         author_id: u128,
@@ -121,7 +117,6 @@ impl CategoryManager {
                 self.carousel_manager
                     .create(comp_type,create_request, layout_id, author_id),
             ),
-            // CompositionCategory::Banner(_) => todo!(),
             CompositionCategory::Banner(comp_type) => CategoryResponse::Banner(
                 self.banner_manager
                     .create(comp_type, create_request, layout_id, author_id),
@@ -150,21 +145,3 @@ impl CategoryManager {
         todo!()
     }
 }
-
-// enum OptionCompositionTypes {
-//     Carousel(carousels::carousel_type::CarouselTypeIter),
-//     Banner(banners::BannerTypeIter),
-//     Text(texts::TextTypeIter),
-//     None,
-// }
-
-// impl CompositionCategory {
-//     pub fn iterator() -> Iter<'static, CompositionCategory> {
-//         static COMPOSITION_CATEGORY: [CompositionCategory; 3] = [
-//             CompositionCategory::Carousel(CarouselType::Basic),
-//             CompositionCategory::Banner(BannerType::Basic),
-//             CompositionCategory::Text(TextType::Basic),
-//         ];
-//         COMPOSITION_CATEGORY.iter()
-//     }
-// }

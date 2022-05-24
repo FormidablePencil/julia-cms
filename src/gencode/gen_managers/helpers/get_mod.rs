@@ -3,7 +3,6 @@ use crate::compositions::carousels::carousel_enums::CarouselType;
 use crate::compositions::CompositionCategory;
 use crate::compositions::texts::text_enums::TextType;
 
-// todo - implement a cleaner func. Use array with enum instead
 pub fn get_mod(composition_category: &CompositionCategory) -> String {
     match composition_category {
         CompositionCategory::Carousel(comp_type) => match comp_type {

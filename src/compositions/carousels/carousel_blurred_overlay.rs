@@ -1,4 +1,3 @@
-use crate::compositions::base_comp_result::BaseCompResult;
 use crate::compositions::carousels::carousel_enums::CarouselResult;
 use crate::compositions::UpdateDataOfComposition;
 
@@ -44,9 +43,7 @@ pub fn delete(composition_source_id: u128, author_id: u128) -> CarouselResult<Ca
 
 #[cfg(test)]
 mod carousel_blurred_overlay_tests {
-    use crate::compositions::carousels::carousel_blurred_overlay::get_public;
-
-    use super::{create, CarouselBlurredOverlayCreateReq};
+    use super::{CarouselBlurredOverlayCreateReq, create};
 
     #[test]
     fn public_crud_test() {

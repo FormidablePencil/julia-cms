@@ -1,7 +1,5 @@
 use crate::compositions::CompositionCategory;
 use crate::gencode::gen_managers::helpers::get_composition_metadata::get_composition_metadata;
-use crate::gencode::gen_managers::helpers::get_composition_name::get_composition_name;
-use crate::get_composition_name;
 
 pub fn get_comp_path(composition_category: &CompositionCategory) -> String {
     match composition_category {
@@ -37,9 +35,4 @@ pub fn get_composition_create_request_path(
     let (first, second) = get_composition_metadata(&composition_category);
     let import = setup_import(&composition_category);
     import(first, second)
-}
-
-pub fn get_composition_response_path(composition_category: &CompositionCategory) -> String {
-    let setup_path = get_comp_path(composition_category);
-    format!("{setup_path}::{}Response", get_composition_name!(composition_category))
 }

@@ -1,9 +1,7 @@
 use std::any::Any;
 
 use crate::compositions::carousels::carousel_basic::CarouselBasicCreateReq;
-use crate::compositions::carousels::carousel_blurred_overlay::CarouselBlurredOverlayCreateReq;
-use crate::compositions::carousels::carousel_enums::{CarouselResponse};
-use crate::compositions::carousels::carousel_images::CarouselOfImagesCreateReq;
+use crate::compositions::carousels::carousel_enums::CarouselResponse;
 use crate::compositions::manager_impl::CompositionTypeManager;
 
 use super::{carousel_basic, carousel_blurred_overlay, carousel_images, UpdateDataOfComposition};

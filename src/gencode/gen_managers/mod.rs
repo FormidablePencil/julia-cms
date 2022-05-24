@@ -9,13 +9,13 @@ use self::gen_manager::gen_manager;
 use self::gen_manager_dependencies::gen_manager_dependencies;
 
 mod builder;
-mod manager_method;
+mod composition_type_manager_method;
 mod gen_manager;
 mod gen_manager_dependencies;
 mod helpers;
 mod import_dependencies;
 
-// todo - move this outside of src and make sure this doesn't get added in build
+// todo - Make sure codegen doesn't enter production
 
 pub fn write_to_file(file_name: &str, contents: &mut String) -> std::io::Result<()> {
     let mut file = File::create(file_name)?;
@@ -45,6 +45,8 @@ pub fn impl_composition_type_manager(composition_category: CompositionCategory) 
         Ok(_) => print!("success"),
         Err(_) => todo!("failed"),
     }
+
+    println!("{}", scope.to_string());
 }
 
 #[cfg(test)]

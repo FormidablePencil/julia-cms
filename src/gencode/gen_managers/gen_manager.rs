@@ -2,7 +2,7 @@ use codegen::{Block, Function, Scope};
 
 use crate::{
     compositions::CompositionCategory,
-    gencode::gen_managers::{builder::ArmsBlock, helpers::get_composition_paths, manager_method::ManagerMethod},
+    gencode::gen_managers::{builder::ArmsBlock, helpers::get_composition_paths, composition_type_manager_method::CompositionTypeManagerMethod},
 };
 use crate::gencode::gen_managers::builder::ArgFunction;
 use crate::gencode::gen_managers::helpers::get_all_composition_res_variants_enums::get_composition_response_enum;
@@ -22,7 +22,7 @@ pub fn gen_manager(scope: &mut Scope, composition_category: &CompositionCategory
         .impl_trait(format!("CompositionTypeManager<{}>", generics))
         .push_fn(
             gen_method(
-                ManagerMethod::GetPublic,
+                CompositionTypeManagerMethod::GetPublic,
                 vec![
                     ("composition_type", &composition_type),
                     ("composition_source_id", "u128"),
@@ -31,7 +31,7 @@ pub fn gen_manager(scope: &mut Scope, composition_category: &CompositionCategory
         )
         .push_fn(
             gen_method(
-                ManagerMethod::GetPrivate,
+                CompositionTypeManagerMethod::GetPrivate,
                 vec![
                     ("composition_type", &composition_type),
                     ("composition_source_id", "u128"),
@@ -41,7 +41,7 @@ pub fn gen_manager(scope: &mut Scope, composition_category: &CompositionCategory
         )
         .push_fn(
             gen_method(
-                ManagerMethod::Create,
+                CompositionTypeManagerMethod::Create,
                 vec![
                     ("composition_type", &composition_type),
                     ("create_request", "Box<dyn Any>"),
@@ -52,7 +52,7 @@ pub fn gen_manager(scope: &mut Scope, composition_category: &CompositionCategory
         )
         .push_fn(
             gen_method(
-                ManagerMethod::Update,
+                CompositionTypeManagerMethod::Update,
                 vec![
                     ("composition_type", &composition_type),
                     ("composition_update_que", "Vec<UpdateDataOfComposition>"),
@@ -63,7 +63,7 @@ pub fn gen_manager(scope: &mut Scope, composition_category: &CompositionCategory
         )
         .push_fn(
             gen_method(
-                ManagerMethod::Delete,
+                CompositionTypeManagerMethod::Delete,
                 vec![
                     ("composition_type", &composition_type),
                     ("composition_source_id", "u128"),
@@ -71,17 +71,15 @@ pub fn gen_manager(scope: &mut Scope, composition_category: &CompositionCategory
                 ],
             )
         );
-
-    println!("{}", scope.to_string());
 }
 
-fn get_method<'a>(composition_category: &'a CompositionCategory) -> Box<dyn Fn(ManagerMethod, Vec<(&str, &str)>) -> Function + 'a> {
+fn get_method<'a>(composition_category: &'a CompositionCategory) -> Box<dyn Fn(CompositionTypeManagerMethod, Vec<(&str, &str)>) -> Function + 'a> {
     let composition_type = get_composition_name(&composition_category, true);
     let composition_name = get_composition_name(&composition_category, false);
     let (_, create_request) = get_composition_paths::get_composition_create_request_path(&composition_category);
     let composition_response = get_composition_response_enum(&composition_category);
 
-    Box::new(move |method: ManagerMethod, args: Vec<(&str, &str)>| {
+    Box::new(move |method: CompositionTypeManagerMethod, args: Vec<(&str, &str)>| {
         Scope::new()
             .new_fn(&method.get_method_name().as_str())
             .ret(&composition_response)

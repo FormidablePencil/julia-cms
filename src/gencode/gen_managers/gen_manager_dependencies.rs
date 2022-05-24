@@ -12,9 +12,6 @@ pub fn gen_manager_dependencies(scope: &mut Scope, composition_category: &Compos
         "crate::compositions::manager_impl",
         "CompositionTypeManager",
     );
-
-    // scope.import("strum_macros", "EnumIter");
-    // scope.import("strum_macros", "EnumString");
     scope.import("super", "UpdateDataOfComposition");
     import_composition_models(scope, &composition_category);
     import_composition_mods(scope, &composition_category);
