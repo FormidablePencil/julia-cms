@@ -1,21 +1,21 @@
 extern crate proc_macro;
 
 use std::any::Any;
+
 use carousels::carousel_enums::CarouselResponse;
 use texts::text_enums::{TextResponse, TextType};
 
 use crate::compositions::banners::banner_enums::BannerResponse;
+use crate::compositions::carousels::manager::CarouselManager;
 
 use self::{
     banners::{
         banner_enums::BannerType,
         manager::BannerManager,
     },
-    carousels::{carousel_enums::CarouselType, CarouselManager},
+    carousels::carousel_enums::CarouselType,
     manager_impl::CompositionTypeManager,
-    texts::{
-        manager::TextManager,
-    },
+    texts::manager::TextManager,
 };
 
 pub mod banners;
@@ -115,7 +115,7 @@ impl CategoryManager {
         match comp_category {
             CompositionCategory::Carousel(comp_type) => CategoryResponse::Carousel(
                 self.carousel_manager
-                    .create(comp_type,create_request, layout_id, author_id),
+                    .create(comp_type, create_request, layout_id, author_id),
             ),
             CompositionCategory::Banner(comp_type) => CategoryResponse::Banner(
                 self.banner_manager

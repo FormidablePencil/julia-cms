@@ -12,9 +12,9 @@ pub fn gen_manager_dependencies(scope: &mut Scope, composition_category: &Compos
         "crate::compositions::manager_impl",
         "CompositionTypeManager",
     );
-    scope.import("super", "UpdateDataOfComposition");
-    import_composition_models(scope, &composition_category);
+    scope.import("crate::compositions", "UpdateDataOfComposition");
     import_composition_mods(scope, &composition_category);
+    import_composition_models(scope, &composition_category);
     import_composition_models(scope, composition_category);
     import_comp_enums(scope, composition_category);
 

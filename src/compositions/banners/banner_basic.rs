@@ -2,7 +2,7 @@ use crate::compositions::banners::banner_enums::BannerResult;
 use crate::compositions::UpdateDataOfComposition;
 
 #[derive(Debug)]
-pub struct BannerCreateReq {}
+pub struct BannerBasicCreateReq {}
 pub struct BannerBasicRes {}
 
 pub fn get_public(composition_source_id: u128) -> BannerResult<BannerBasicRes> {
@@ -13,7 +13,7 @@ pub fn get_private(composition_source_id: u128, author_id: u128) -> BannerResult
     todo!()
 }
 
-pub fn create(create_request: &BannerCreateReq, layout_id: u128, author_id: u128) -> BannerResult<BannerBasicRes> {
+pub fn create(create_request: &BannerBasicCreateReq, layout_id: u128, author_id: u128) -> BannerResult<BannerBasicRes> {
     todo!()
 }
 

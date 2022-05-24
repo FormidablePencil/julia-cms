@@ -4,6 +4,7 @@ use strum::IntoEnumIterator;
 use crate::compositions::{
     banners::banner_enums::BannerType, carousels::carousel_enums::CarouselType, CompositionCategory,
 };
+use crate::compositions::texts::text_enums::TextType;
 use crate::gencode::gen_managers::helpers::get_mod::get_mod;
 
 pub fn import_composition_mods(scope: &mut Scope, composition_category: &CompositionCategory) {
@@ -21,8 +22,8 @@ pub fn import_composition_mods(scope: &mut Scope, composition_category: &Composi
             }
         }
         CompositionCategory::Text(_) => {
-            for item in BannerType::iter() {
-                let mod_name = get_mod(&CompositionCategory::Banner(item));
+            for item in TextType::iter() {
+                let mod_name = get_mod(&CompositionCategory::Text(item));
                 scope.import("super", mod_name.as_str());
             }
         }

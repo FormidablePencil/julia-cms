@@ -63,24 +63,5 @@ mod tests {
         );
 
         print!("{}", scope.to_string());
-        // should print:
-        // use crate::compositions::carousels::carousel_basic::CarouselBasicCreateReq;
-        // use crate::compositions::carousels::carousel_blurred_overlay::CarouselBlurredOverlayCreateReq;
-        // use crate::compositions::carousels::carousel_images::CarouselOfImagesCreateReq;
     }
 }
-
-// todo - tests
-
-// fn execute_closure<F>(mut closure_argument: F)
-// where
-//     F: FnMut() -> i32,
-// {
-//     let result = closure_argument();
-//     println!("Result of closure: {}", result);
-// }
-
-// fn execute_closure(mut closure_argument: &dyn FnMut() -> i32) {
-//     let result = closure_argument();
-//     println!("Result of closure: {}", result);
-// }

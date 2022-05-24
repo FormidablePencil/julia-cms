@@ -14,7 +14,7 @@ use ipfsapi::IpfsApi;
 use julia_cms::compositions::CompositionCategory;
 
 // use julia_cms::compositions::{
-//     banners::{banner_basic::BannerCreateReq, BannerManager, BannerType},
+//     banners::{banner_basic::BannerBasicCreateReq, BannerManager, BannerType},
 //     carousels::carousel_blurred_overlay::get_public,
 // };
 mod compositions;
@@ -42,7 +42,7 @@ fn main() {
     // impl_composition_type_manager(CompositionCategory::Banner(BannerType::Basic));
     // impl_composition_type_manager(
     //     CompositionCategory::Carousel(CarouselType::Basic),
-    //     "BannerCreateReq",
+    //     "BannerBasicCreateReq",
     // );
     // impl_composition_type_manager(CompositionCategory::Text(TextType::Basic));
     // let banner_basic_arm = CrudOperation::Create.get_arms(

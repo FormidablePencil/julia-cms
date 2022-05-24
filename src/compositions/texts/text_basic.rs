@@ -13,7 +13,7 @@ pub fn get_private(composition_source_id: u128, author_id: u128) -> TextResult<T
 }
 
 pub fn create(
-    create_request: TextBasicCreateReq,
+    create_request: &TextBasicCreateReq,
     layout_id: u128,
     author_id: u128,
 ) -> TextResult<TextBasicRes> {
