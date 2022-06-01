@@ -12,6 +12,10 @@ use std::error::Error;
 use codegen::{Block, Function, Scope};
 use ipfsapi::IpfsApi;
 use julia_cms::compositions::CompositionCategory;
+use julia_cms::config::db_connection;
+
+#[macro_use]
+extern crate dotenv_codegen;
 
 // use julia_cms::compositions::{
 //     banners::{banner_basic::BannerBasicCreateReq, BannerManager, BannerType},
@@ -19,6 +23,26 @@ use julia_cms::compositions::CompositionCategory;
 // };
 mod compositions;
 // std::io::Read
+
+fn main() {
+    println!("============");
+    println!("{}", dotenv!("MEANING_OF_LIFE"));
+    println!("============");
+
+    let f1 = db_connection();
+    println!("{:?}", f1);
+    // modify
+    {
+        let mut conf = f1.lock().unwrap();
+        conf.db_connection_str = "hello".to_string();
+    }
+
+    let f2 = db_connection();
+    println!("{:?}", f2);
+    let conf2 = f2.lock().unwrap();
+
+    assert_eq!(conf2.db_connection_str, "hello".to_string());
+}
 
 fn ipfs_test() {
     // let api = IpfsApi::new("127.0.0.1", 5001);
@@ -36,7 +60,7 @@ fn ipfs_test() {
     // println!("k");
 }
 
-fn main() {
+fn main2() {
     // ~ CRUD components
 
     // impl_composition_type_manager(CompositionCategory::Banner(BannerType::Basic));

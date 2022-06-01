@@ -1,5 +1,7 @@
 pub mod compositions;
-pub mod gencode;
+mod gencode;
+pub mod space;
+pub mod config;
 
 // use compositions::carousels::carousel_blurred_overlay;
 // use ::CarouselDT;

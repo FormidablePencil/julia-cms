@@ -23,6 +23,7 @@ pub mod carousels;
 pub mod manager_impl;
 pub mod texts;
 mod base_comp_result;
+mod crud;
 
 // region enum and structs
 pub struct UpdateDataOfComposition {
