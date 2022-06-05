@@ -8,14 +8,47 @@
 
 use core::fmt;
 use std::error::Error;
+use std::io;
 
 use codegen::{Block, Function, Scope};
-use ipfsapi::IpfsApi;
+use ipfs_api_backend_hyper::{IpfsApi, IpfsClient};
+// use ipfs_api::{IpfsApi, IpfsClient};
+use julia_cms::account::create_document;
 use julia_cms::compositions::CompositionCategory;
 use julia_cms::config::db_connection;
+mod tests;
+use std::io::{Cursor, Write};
+use futures::TryStreamExt;
 
 #[macro_use]
 extern crate dotenv_codegen;
+
+#[actix_rt::main]
+async fn main() {
+    let client = IpfsClient::default();
+    let data = Cursor::new("Hello World!");
+
+    match client.add(data).await {
+        Ok(res) => {
+            // println!("{}", res.hash);
+            match client
+                .get(res.hash.as_str())
+                .map_ok(|chunk| chunk.to_vec())
+                .try_concat()
+                .await
+            {
+                Ok(res) => {
+                    let out = io::stdout();
+                    let mut out = out.lock();
+
+                    out.write_all(&res).unwrap();
+                }
+                Err(e) => eprintln!("error getting file: {:?}", e)
+            }
+        },
+        Err(e) => eprintln!("error adding file: {:?}", e)
+    }
+}
 
 // use julia_cms::compositions::{
 //     banners::{banner_basic::BannerBasicCreateReq, BannerManager, BannerType},
@@ -24,11 +57,16 @@ extern crate dotenv_codegen;
 mod compositions;
 // std::io::Read
 
-fn main() {
-    println!("============");
-    println!("{}", dotenv!("MEANING_OF_LIFE"));
-    println!("============");
+#[tokio::main]
+async fn main33() {
+    let res = create_document().await.unwrap();
+    // match res {
+    //     Ok(_) => println!("success"),
+    //     Err(err) => panic!("{}", err)
+    // }
+}
 
+fn main22() {
     let f1 = db_connection();
     println!("{:?}", f1);
     // modify

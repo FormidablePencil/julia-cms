@@ -1,9 +1,9 @@
 pub enum BaseCompResult<Content, SuccessCode, FailureCode> {
-    // success
+    // success composition and source id
     Content(Content),
-    // success
-    Id(u128),
+    // success. Source id and comp id
+    Id(u128, u128),
     // success but only with a code
-    Success(SuccessCode),
+    SuccessCode(SuccessCode),
     Failed(FailureCode),
 }

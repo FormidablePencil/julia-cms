@@ -1,7 +1,7 @@
 use chacha20poly1305::{ChaCha20Poly1305, Key, Nonce};
 use chacha20poly1305::aead::{Aead, NewAead};
 
-fn encrypt(secret_key: &[u8], data: &String) -> Vec<u8> {
+pub fn encrypt(secret_key: &[u8], data: &String) -> Vec<u8> {
     let key = Key::from_slice(secret_key); // 32-bytes
     let cipher = ChaCha20Poly1305::new(key);
 
@@ -24,8 +24,9 @@ fn decrypt(secret_key: &[u8], ciphertext: Vec<u8>) -> Vec<u8> {
 
 #[cfg(test)]
 mod data_encryption {
+    use std::str::from_utf8;
     use crate::temp_smart_contract_address_maps::crud_text::BasicText;
-    use crate::temp_smart_contract_address_maps::encrypt_data::{decrypt, encrypt};
+    use crate::temp_smart_contract_address_maps::encryption::{decrypt, encrypt};
 
     #[test]
     fn encryption() {
@@ -44,5 +45,6 @@ mod data_encryption {
 
         let deserialized_data = serde_json::from_slice::<BasicText>(&decrypted_data).unwrap();
         println!("{:?}, {:?}", data, deserialized_data);
+        println!("{}", from_utf8(&decrypted_data.as_slice()).unwrap());
     }
 }

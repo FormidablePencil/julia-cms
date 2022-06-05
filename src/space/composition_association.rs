@@ -1,22 +1,13 @@
-pub enum Association {
-    Related,
-    Reference,
-}
+use crate::space::relationship_enums::{Relationship, RelationshipDirection};
 
-pub enum AssociationWay {
-    BothWays,
-    LeftToRight,
-    RightToLeft,
-}
-
-pub fn associate_compositions_to_spaces() {}
+pub fn associate_compositions_to_layout() {}
 
 // not author space
-pub fn associate_spaces(
+pub fn associate_layout(
     space_address: u128,
-    associate_to_space_address: u128,
-    association: Association,
-    association_way: AssociationWay,
+    associate_to_layout_address: u128,
+    association: Relationship,
+    association_way: RelationshipDirection,
 ) {
     todo!()
 }

@@ -38,8 +38,8 @@ pub async fn delete(space_address: &str) -> Result<(), String> {
 }
 
 #[cfg(test)]
-mod composition_arrangement {
-    use crate::space::compositions::{create, delete, get, update};
+mod compositions_arrangement {
+    use crate::space::compositions_arrangement::{create, delete, get, update};
     use crate::space::space_enums::SpaceCreateReq;
 
     #[actix_rt::test]

@@ -24,6 +24,8 @@ pub mod manager_impl;
 pub mod texts;
 mod base_comp_result;
 mod crud;
+mod composition_relationships;
+mod composition_index;
 
 // region enum and structs
 pub struct UpdateDataOfComposition {
@@ -41,10 +43,10 @@ pub struct UpdateColumn {
     value: String,
 }
 
-struct CategoryManager {
-    text_manager: TextManager,
-    carousel_manager: CarouselManager,
-    banner_manager: BannerManager,
+pub struct CategoryManager {
+    pub(crate) text_manager: TextManager,
+    pub(crate) carousel_manager: CarouselManager,
+    pub(crate) banner_manager: BannerManager,
 }
 
 #[derive(Debug)]
@@ -54,7 +56,7 @@ pub enum CompositionCategory {
     Text(TextType),
 }
 
-enum CategoryResponse {
+pub enum CategoryResponse {
     Carousel(CarouselResponse),
     Banner(BannerResponse),
     Text(TextResponse),
@@ -62,10 +64,48 @@ enum CategoryResponse {
 
 // endregion enum and structs
 
-impl CategoryManager {
+pub trait ICategoryManager {
     fn get_public(
         &self,
-        comp_category: CompositionCategory,
+        comp_category: &CompositionCategory,
+        composition_source_id: u128,
+    ) -> CategoryResponse;
+
+    fn get_private(
+        &self,
+        comp_category: &CompositionCategory,
+        composition_source_id: u128,
+        author_id: u128,
+    ) -> CategoryResponse;
+
+    fn create(
+        &self,
+        comp_category: &CompositionCategory,
+        create_request: Box<dyn Any>,
+        layout_id: u128,
+        author_id: u128,
+    ) -> CategoryResponse;
+
+    fn update(
+        &self,
+        comp_category: &CompositionCategory,
+        composition_update_que: Vec<UpdateDataOfComposition>,
+        layout_id: u128,
+        author_id: u128,
+    );
+
+    fn delete(
+        &self,
+        comp_category: &CompositionCategory,
+        composition_source_id: u128,
+        author_id: u128,
+    ) -> bool;
+}
+
+impl ICategoryManager for CategoryManager {
+    fn get_public(
+        &self,
+        comp_category: &CompositionCategory,
         composition_source_id: u128,
     ) -> CategoryResponse {
         match comp_category {
@@ -86,7 +126,7 @@ impl CategoryManager {
 
     fn get_private(
         &self,
-        comp_category: CompositionCategory,
+        comp_category: &CompositionCategory,
         composition_source_id: u128,
         author_id: u128,
     ) -> CategoryResponse {
@@ -108,7 +148,7 @@ impl CategoryManager {
 
     fn create(
         &self,
-        comp_category: CompositionCategory,
+        comp_category: &CompositionCategory,
         create_request: Box<dyn Any>,
         layout_id: u128,
         author_id: u128,
@@ -129,17 +169,17 @@ impl CategoryManager {
         }
     }
 
-    // fn update(
-    //     &self,
-    //     comp_category: CompositionCategory,
-    //     composition_update_que: Vec<UpdateDataOfComposition>,
-    //     layout_id: u128,
-    //     author_id: u128,
-    // ) {}
+    fn update(
+        &self,
+        comp_category: &CompositionCategory,
+        composition_update_que: Vec<UpdateDataOfComposition>,
+        layout_id: u128,
+        author_id: u128,
+    ) {}
 
     fn delete(
         &self,
-        comp_category: CompositionCategory,
+        comp_category: &CompositionCategory,
         composition_source_id: u128,
         author_id: u128,
     ) -> bool {

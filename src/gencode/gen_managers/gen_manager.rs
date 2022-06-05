@@ -43,7 +43,7 @@ pub fn gen_manager(scope: &mut Scope, composition_category: &CompositionCategory
             gen_method(
                 CompositionTypeManagerMethod::Create,
                 vec![
-                    ("composition_type", &composition_type),
+                    ("composition_type", format!("&{}", &composition_type).as_str()),
                     ("create_request", "Box<dyn Any>"),
                     ("layout_id", "u128"),
                     ("author_id", "u128"),
@@ -54,7 +54,7 @@ pub fn gen_manager(scope: &mut Scope, composition_category: &CompositionCategory
             gen_method(
                 CompositionTypeManagerMethod::Update,
                 vec![
-                    ("composition_type", &composition_type),
+                    ("composition_type", format!("&{}", &composition_type).as_str()),
                     ("composition_update_que", "Vec<UpdateDataOfComposition>"),
                     ("composition_source_id", "u128"),
                     ("author_id", "u128"),
@@ -65,7 +65,7 @@ pub fn gen_manager(scope: &mut Scope, composition_category: &CompositionCategory
             gen_method(
                 CompositionTypeManagerMethod::Delete,
                 vec![
-                    ("composition_type", &composition_type),
+                    ("composition_type", format!("&{}", &composition_type).as_str()),
                     ("composition_source_id", "u128"),
                     ("author_id", "u128"),
                 ],

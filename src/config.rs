@@ -1,6 +1,7 @@
 use std::mem::MaybeUninit;
 use std::sync::{Mutex, Once};
 use dotenv_codegen::dotenv;
+// use dotenv::dotenv;
 use serde::{Deserialize, Serialize};
 
 use firebase_rs::*;

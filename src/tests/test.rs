@@ -1,4 +1,3 @@
-mod compositions;
 use compositions::carousels::carousel_basic;
 // use ::CarouselDT;
 

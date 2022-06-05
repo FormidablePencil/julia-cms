@@ -1,6 +1,7 @@
 pub enum Relationship {
     Related,
     Reference,
+    Parent,
 }
 
 pub enum RelationshipDirection {
